@@ -1,0 +1,33 @@
+#!/bin/bash
+# claude-askpass - GUI password prompt for sudo
+# https://github.com/hugsband/claude-sudo-tools
+#
+# Supports: KDE (kdialog), GNOME (zenity), yad, ssh-askpass
+# Version: 1.0.0
+
+TITLE="Claude Code - Authentication Required"
+PROMPT="Enter sudo password:"
+TIMEOUT=60  # seconds
+
+# Try GUI dialog tools in order of preference
+if command -v kdialog &>/dev/null; then
+    # KDE - kdialog doesn't have native timeout, but 60s is reasonable
+    kdialog --title "$TITLE" --password "$PROMPT" 2>/dev/null
+elif command -v zenity &>/dev/null; then
+    # GNOME/GTK
+    zenity --password --title="$TITLE" --timeout=$TIMEOUT 2>/dev/null
+elif command -v yad &>/dev/null; then
+    # YAD (Yet Another Dialog)
+    yad --entry --hide-text --title="$TITLE" --text="$PROMPT" --timeout=$TIMEOUT 2>/dev/null
+elif command -v ssh-askpass &>/dev/null; then
+    # Fallback to SSH askpass
+    SSH_ASKPASS_REQUIRE=force ssh-askpass "$PROMPT" 2>/dev/null
+else
+    echo "ERROR: No GUI password dialog available" >&2
+    echo "" >&2
+    echo "Install one of the following:" >&2
+    echo "  Fedora/Nobara: sudo dnf install kdialog   # or zenity" >&2
+    echo "  Ubuntu/Debian: sudo apt install zenity" >&2
+    echo "  Arch Linux:    sudo pacman -S zenity" >&2
+    exit 1
+fi

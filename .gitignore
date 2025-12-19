@@ -1,0 +1,27 @@
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Test artifacts
+*.log
+*.tmp
+*.bak
+
+# Local development
+.env
+.env.local
+*.local
+
+# Build outputs (if any future compilation)
+build/
+dist/
+*.o
