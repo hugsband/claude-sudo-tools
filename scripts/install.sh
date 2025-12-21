@@ -3,11 +3,11 @@
 # https://github.com/hugsband/claude-sudo-tools
 #
 # Installs GUI-based sudo authentication for Claude Code CLI.
-# Version: 1.0.0
+# Version: 1.0.1
 
 set -euo pipefail
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 INSTALL_DIR="/usr/local/bin"
 SUDOERS_FILE="/etc/sudoers.d/claude-sudo"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -63,6 +63,10 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --timeout)
+            if [[ -z "${2:-}" ]] || ! [[ "$2" =~ ^[0-9]+$ ]] || [[ "$2" -lt 1 ]] || [[ "$2" -gt 1440 ]]; then
+                echo -e "${RED}ERROR: --timeout requires a number between 1 and 1440 (minutes)${NC}" >&2
+                exit 1
+            fi
             TIMEOUT_MINUTES="$2"
             shift 2
             ;;

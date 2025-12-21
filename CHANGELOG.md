@@ -18,6 +18,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2025-12-20
+
+### Fixed
+- **CRITICAL:** Fixed keepalive process orphaning - changed from `exec claude` to `claude` to preserve cleanup trap
+- Improved keepalive error handling with clearer logic
+- Enhanced cleanup function to properly wait for background processes
+- Added orphaned process cleanup to uninstall script
+
+### Changed
+- Updated documentation to accurately reflect cleanup behavior
+- Added timeout validation (1-1440 minutes) to install script
+- Updated ARCHITECTURE.md to reflect process management changes
+
+### Security
+- Orphaned processes no longer indefinitely refresh sudo credentials after Claude exits
+- Improved process lifecycle management prevents credential persistence beyond session
+
+---
+
 ## [1.0.0] - 2025-12-19
 
 ### Added
@@ -56,11 +75,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.1 | 2025-12-20 | Critical bugfix: prevent keepalive orphaning |
 | 1.0.0 | 2025-12-19 | Initial release |
 
 ---
 
 ## Upgrade Notes
+
+### From 1.0.0 to 1.0.1
+
+**IMPORTANT:** This update fixes a critical bug where keepalive processes were orphaned.
+
+1. Uninstall the old version (this will also kill orphaned processes):
+   ```bash
+   cd claude-sudo-tools
+   git pull origin main
+   ./scripts/uninstall.sh
+   ```
+
+2. Reinstall:
+   ```bash
+   ./scripts/install.sh
+   ```
+
+If you're upgrading from 1.0.0, you likely have orphaned processes. The uninstaller will clean these up automatically.
 
 ### From pre-release to 1.0.0
 

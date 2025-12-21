@@ -3,6 +3,9 @@
 # https://github.com/hugsband/claude-sudo-tools
 #
 # Usage: bash <(curl -fsSL https://raw.githubusercontent.com/hugsband/claude-sudo-tools/main/scripts/install-remote.sh)
+#
+# NOTE: This installs from the 'main' branch to get the latest version.
+# For a specific version, clone the repo and checkout a tag instead.
 
 set -euo pipefail
 

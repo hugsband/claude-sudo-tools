@@ -22,8 +22,8 @@ This prevents Claude from running system administration tasks, installing packag
 
 1. **GUI Authentication** - Password prompt via kdialog/zenity (no terminal needed)
 2. **Credential Caching** - Authenticate once, cached for 90 minutes
-3. **Session Management** - Background process keeps credentials fresh
-4. **Clean Exit** - Credentials cleaned up when you close Claude
+3. **Session Management** - Background process keeps credentials fresh during your session
+4. **Clean Exit** - Background processes cleaned up when you close Claude
 
 ## Quick Install
 
@@ -185,6 +185,18 @@ sudo dnf install kdialog  # or zenity
 **Fix:** Install Claude Code CLI:
 ```bash
 npm install -g @anthropic-ai/claude-code
+```
+
+### Check for orphaned processes
+
+If you're upgrading from version 1.0.0, check for orphaned processes:
+```bash
+ps aux | grep claude-sudo | grep -v grep
+```
+
+The uninstaller automatically cleans these up, or manually kill them:
+```bash
+pkill -f "/usr/local/bin/claude-sudo"
 ```
 
 See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for more issues.

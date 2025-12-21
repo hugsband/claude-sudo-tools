@@ -113,8 +113,9 @@ User runs: claude-sudo [args]
                     ▼
 ┌───────────────────────────────────────┐
 │ 8. Execute Claude                     │
-│    exec claude "$@"                   │
-│    - Replaces current process         │
+│    claude "$@"                        │
+│    - Runs Claude as child process     │
+│    - Keeps cleanup trap active        │
 │    - Passes all arguments             │
 └───────────────────────────────────────┘
 ```
@@ -359,11 +360,13 @@ To wrap a different command instead of `claude`:
 
 ```bash
 # In claude-sudo, change:
-exec claude "$@"
+claude "$@"
 
 # To:
-exec your-command "$@"
+your-command "$@"
 ```
+
+**Note:** Do NOT use `exec` to run the command, as this will prevent the cleanup trap from running and cause keepalive processes to become orphaned.
 
 ### Debugging
 

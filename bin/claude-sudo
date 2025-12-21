@@ -3,11 +3,11 @@
 # https://github.com/hugsband/claude-sudo-tools
 #
 # Authenticates once via GUI prompt, maintains credentials for session duration.
-# Version: 1.0.0
+# Version: 1.0.1
 
 set -euo pipefail
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 ASKPASS="/usr/local/bin/claude-askpass"
 KEEPALIVE_INTERVAL=240  # 4 minutes (well under default timeout)
 
@@ -98,7 +98,10 @@ keepalive() {
     while true; do
         sleep $KEEPALIVE_INTERVAL
         # Use -A to trigger askpass if credentials expired
-        sudo -A -v 2>/dev/null || exit 0
+        # Exit silently if authentication fails (credentials expired/user cancelled)
+        if ! sudo -A -v 2>/dev/null; then
+            exit 0
+        fi
     done
 }
 keepalive &
@@ -106,9 +109,16 @@ KEEPALIVE_PID=$!
 
 # Cleanup function
 cleanup() {
-    kill $KEEPALIVE_PID 2>/dev/null || true
+    local exit_code=$?
+    # Kill keepalive process
+    if [[ -n "${KEEPALIVE_PID:-}" ]]; then
+        kill "$KEEPALIVE_PID" 2>/dev/null || true
+        wait "$KEEPALIVE_PID" 2>/dev/null || true
+    fi
+    exit $exit_code
 }
 trap cleanup EXIT INT TERM HUP
 
 # Run Claude Code with all passed arguments
-exec claude "$@"
+# Use 'claude' directly (not exec) so cleanup trap remains active
+claude "$@"
