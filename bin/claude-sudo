@@ -3,11 +3,11 @@
 # https://github.com/hugsband/claude-sudo-tools
 #
 # Authenticates once via GUI prompt, maintains credentials for session duration.
-# Version: 1.0.1
+# Version: 1.0.2
 
 set -euo pipefail
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 ASKPASS="/usr/local/bin/claude-askpass"
 KEEPALIVE_INTERVAL=240  # 4 minutes (well under default timeout)
 
@@ -97,6 +97,11 @@ fi
 keepalive() {
     while true; do
         sleep $KEEPALIVE_INTERVAL
+        # Exit if parent process died (handles SIGKILL edge case)
+        # $$ in subshell still refers to parent's PID
+        if ! kill -0 $$ 2>/dev/null; then
+            exit 0
+        fi
         # Use -A to trigger askpass if credentials expired
         # Exit silently if authentication fails (credentials expired/user cancelled)
         if ! sudo -A -v 2>/dev/null; then

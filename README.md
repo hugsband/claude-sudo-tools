@@ -2,6 +2,8 @@
 
 > On-demand sudo access for [Claude Code](https://claude.com/claude-code) CLI on Linux systems.
 
+**Why this utility?** You could run Claude as root or configure passwordless sudo—but both remove important security barriers. This tool lets you authenticate once per session via GUI prompt, with time-limited credential caching and full audit logging. No permanent privilege escalation, no wide-open sudoers rules.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-green.svg)](#requirements)
 [![Shell: Bash](https://img.shields.io/badge/Shell-Bash-yellow.svg)](#requirements)

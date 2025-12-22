@@ -18,6 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] - 2025-12-21
+
+### Fixed
+- Keepalive now detects parent process death (handles SIGKILL edge case)
+- Orphaned keepalive processes self-terminate when parent is killed
+
+### Changed
+- Added prominent "Why this utility?" note to README explaining benefits vs running as root or passwordless sudo
+
+---
+
 ## [1.0.1] - 2025-12-20
 
 ### Fixed
@@ -75,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.2 | 2025-12-21 | Fix SIGKILL edge case, add documentation |
 | 1.0.1 | 2025-12-20 | Critical bugfix: prevent keepalive orphaning |
 | 1.0.0 | 2025-12-19 | Initial release |
 
