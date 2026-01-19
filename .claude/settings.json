@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"$CLAUDE_PROJECT_DIR\"/docs/ARCHITECTURE.md 2>/dev/null || cat \"$CLAUDE_PROJECT_DIR\"/README.md 2>/dev/null || echo 'No project docs found'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/codex-review.sh",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}
